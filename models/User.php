@@ -20,4 +20,25 @@ class User{
         $stmt->execute();
         return $stmt;
     }
+
+    public function create($first, $last, $email, $pass, $acct){
+        $query = "INSERT into users(firstname,lastname,email,password,account_number)
+                                VALUES( '". $first . "','". $last. "','".$email ."','". $pass."','". $acct ."')";
+        // $query = "INSERT INTO users(firstname,lastname,email,password,account_number)
+        // //                     VALUES('testfirst','testlast','testemail@gmail.com','testpwd','1111009')";
+        try{                        
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        }
+        catch(PDOException $e){
+           if($e->getCode() == 23000){
+               return json_encode(array(
+                   'message'=> 'account already exists',
+                   'code' => 400
+               ));
+           }
+           return $stmt;
+        }
+
+    }
 }
