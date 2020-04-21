@@ -26,7 +26,7 @@ class User{
                                 VALUES( '". $first . "','". $last. "','".$email ."','". $pass."','". $acct ."')";
         // $query = "INSERT INTO users(firstname,lastname,email,password,account_number)
         // //                     VALUES('testfirst','testlast','testemail@gmail.com','testpwd','1111009')";
-        try{                        
+        try{
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         }
@@ -42,3 +42,4 @@ class User{
 
     }
 }
+?>
