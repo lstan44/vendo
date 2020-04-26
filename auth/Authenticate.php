@@ -1,45 +1,60 @@
-<?
-
-include_once '../../config/Database.php';
+<?php
 
 class Authenticate{
+    private $conn;
 
-    private $conn = new Database()->connect();
+    function __construct($db){
+        $this->conn = $db->connect();
+    }
 
-    public function login($email, $pwd){
-        $query = 'SELECT password from users where email = ?';
+    public function login($email, $pwd_){
+        
+        $res = array();
+
+        $query = "SELECT pwd from users where email ='".$email ."'";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
         $count = $stmt->rowCount();
 
+        echo "row from first query: ". $count . PHP_EOL;  ///////////// 
+
         if($count <= 0){
-            return array(
+            $res =  array(
                 'status' => 0,
                 'message' => 'no user found.'
             );
+            return $res;
+            var_dump($res);  /////////////////
         }
 
         if($count > 0){
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            extract($row);
-            $pass = $password;
+            $pass;
 
-            $sql = "SELECT user_id, account_number, firstname, lastname from users where password ='" .$pass."'";
+            while( $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            $pass = $pwd;
+
+            echo "Pwd: ". $pass . PHP_EOL;  ///////////////////////
+            }
+
+            $sql = "SELECT user_id, account_number, firstname, lastname from users where pwd='".$pwd_."' ";
             $stmt2 = $this->conn->prepare($sql);
             $stmt2->execute();
-            
-            if($stmt2->rowCount() < 0){
-                return array(
+            echo "row from first second: ". $stmt2->rowCount() . PHP_EOL;  ///////////// 
+
+            if($stmt2->rowCount() <= 0){
+                
+                $res =  array(
                     'status' => 0,
                     'message' => 'Password incorrect'
                 );
             }
 
-            $result = $stmt2->fetch(PDO::FETCH_ASSOC);
+           while( $result = $stmt2->fetch(PDO::FETCH_ASSOC) ){
             extract($result);
 
-            return array(
+            $res =  array(
                 'status'=> 1,
                 'message'=> 'logged in successfully',
                 'user_id'=> $user_id,
@@ -47,10 +62,12 @@ class Authenticate{
                 'firstname' => $firstname,
                 'lastname' => $lastname
             );
+
+            //var_dump($res);
+        }
     }
+
+   return $res;
 }
 
-
-
-
-} //class ends here
+} 

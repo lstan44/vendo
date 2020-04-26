@@ -1,8 +1,12 @@
 <?php
 
-include_once './auth/Authenticate.php';
+include_once 'auth/Authenticate.php';
+include_once 'config/Database.php';
 
+$db = new Database();
 
-$authIntent = new Authenticate();
+$auth = new Authenticate($db);
 
-$authIntent->login('stanleylalanne94@gmail.com','mypass');
+$authIntent = $auth->login('stanleylalanne94@gmail.com','password123');
+
+var_dump($authIntent);
