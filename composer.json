@@ -1,0 +1,8 @@
+{
+    
+    "require": {
+        "cloudinary/cloudinary_php": "^1.16",
+        "vlucas/phpdotenv": "^4.1",
+        "stripe/stripe-php": "^7.29"
+    }
+}
