@@ -11,11 +11,16 @@ $auth = new Authenticate($db);
 $email = $_POST['email'];
 $pwd = $_POST['pwd'];
 
-$authIntent = $auth->login_seller($email ,$pwd);
+$authIntent = $auth->login_seller($email ,hash('sha256',$pwd) );
+
+var_dump($authIntent);
 
 if( $authIntent['status'] == 1){
     session_start();
     $_SESSION['seller_id'] = $authIntent['seller_id'];
     
     header('Location: portal.php');
+}
+else{
+    header('Location: index.php');
 }
