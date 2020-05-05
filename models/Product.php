@@ -27,6 +27,29 @@ class Product{
         return $stmt;
     }
 
+    public function add($name, $desc, $price, $img_url, $dept, $count, $seller_id){
+
+        $product_query = "INSERT INTO products(name,description,department,current_price,seller_id)
+                          VALUES('".$name."','".$desc."','".$dept."','".$price."','".$seller_id."')";
+        $stmt = $this->conn->prepare($product_query);
+        $stmt->execute();
+
+        $p_id;
+        $sql = "SELECT product_id from products where(name='".$name."')";
+        $s = $this->conn->prepare($sql);
+        $s->execute();
+        while( $row = $s->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            $p_id = $product_id;
+        }
+
+        $img_query = "INSERT INTO images(img_url, product_id, uploaded_by)
+                      VALUES('".$img_url."','".$p_id."','".$seller_id."')";
+
+        $img_stmt = $this->conn->prepare($img_query);
+        $img_stmt->execute();
+    }
+
 }
 
 ?>

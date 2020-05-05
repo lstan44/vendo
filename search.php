@@ -4,7 +4,7 @@
 
 
 <?php
-
+session_start();
 include_once 'config/Database.php';
 
 $db = new Database();
@@ -12,7 +12,7 @@ $conn = $db->connect();
 
 $search_term = $_POST['search_box'];
 
-$query = "SELECT * from products where ( description LIKE '%" . $search_term . "%' OR name LIKE '%".$search_term."%')";
+$query = "SELECT * from products as p, images as i where ( (description LIKE '%" . $search_term . "%' OR name LIKE '%".$search_term."%') AND (p.product_id = i.product_id) )";
 
 $stmt = $conn->prepare($query);
 
@@ -47,7 +47,8 @@ if($stmt->rowCount() <=0 ){
         'count' => $count,
         'current_price' => $current_price,
         'previous_price' => $previous_price,
-        'department' => $department
+        'department' => $department,
+        'img_url' => $img_url
     );
     array_push($product_list, $temp_arr);
 
@@ -63,7 +64,7 @@ if($stmt->rowCount() <=0 ){
 <body>
 
 <?php 
-    if(!isset($_SESSION['id'])){
+    if(!isset($_SESSION['user_id'])){
         include 'views/header1.php'; //
     }
     else{
@@ -74,6 +75,7 @@ if($stmt->rowCount() <=0 ){
     
     <div id="product_box">
     <h2> <?= $product["name"]; ?></h2>
+    <img src="<?= $product["img_url"]; ?>" />
     <p><?= $product["description"]; ?></p>
     <h3>Sold by: <?= $product["seller_id"]; ?></h3>
     <h3>amount left in stock: <?= $product["count"]; ?></h3>

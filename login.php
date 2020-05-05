@@ -8,7 +8,7 @@ $db = new Database();
 $auth = new Authenticate($db);
 
 $email = $_POST['email'];
-$pwd = $_POST['pwd'];
+$pwd = hash('sha256',$_POST['pwd'] );
 
 $authIntent = $auth->login($email ,$pwd);
 

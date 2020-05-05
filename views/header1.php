@@ -5,7 +5,7 @@ print <<<EOF
 <header id = "header1" >
 <nav>
 <ul>
-<li> Header1 </li>
+<a href="/vendo"> Home </a>
 </ul>
 </nav>
 
@@ -23,6 +23,10 @@ print <<<EOF
     <input type="text" placeholder="search for item.." name="search_box"/>
     <input type="submit"/>
 </form>
+
+<div id="signup_link"> 
+<a href="signup.php"> Sign Up </a>
+</div> 
 
     </span>
 </div>
