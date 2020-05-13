@@ -18,7 +18,8 @@ class Product{
     public function __construct($db){
         $this->conn = $db;
     }
-
+    
+    //method to real all available products
     public function read(){
         $query = 'SELECT product_id,seller_id,name,description,count,current_price,previous_price,department from products';
         $stmt = $this->conn->prepare($query);
@@ -27,6 +28,7 @@ class Product{
         return $stmt;
     }
 
+    //method to add a product
     public function add($name, $desc, $price, $img_url, $dept, $count, $seller_id){
 
         $product_query = "INSERT INTO products(name,description,department,current_price,seller_id)
@@ -48,6 +50,15 @@ class Product{
 
         $img_stmt = $this->conn->prepare($img_query);
         $img_stmt->execute();
+    }
+
+    //method to read a single product given its id
+    function read_single($id){
+        $query = "SELECT * from products as p join images on images.product_id = p.product_id WHERE p.product_id='".$id."'";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt;
     }
 
 }

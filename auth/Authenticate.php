@@ -128,7 +128,8 @@ public function login_seller($email, $pwd_){
             'seller_id'=> $seller_id,
             'account_number'=> $account_number,
             'firstname' => $firstname,
-            'lastname' => $lastname
+            'lastname' => $lastname,
+            'email' => $email
         );
 
         //var_dump($res);

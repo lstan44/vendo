@@ -3,7 +3,7 @@ session_start();
 if(! isset($_SESSION['seller_id'])){
     header('Location: index.php');
 }
-echo $_SESSION['seller_id'];
+//echo $_SESSION['seller_id'];
 
 include_once '../config/Database.php';
 include_once '../models/Product.php';
@@ -37,74 +37,42 @@ while( $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 ?>
 
+<!doctype html>
 <html>
-<head>
-<title>Welcome to your Merchant portal</title>
+    <head>
 
+    <title>Welcome <?php echo $_SESSION['first']; ?></title>
+  
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 </head>
 
 <body>
-    <header>
-        <nav>
-        <form action="logout.php" method="post">
-        <button type="submit">Logout</button>
-        </form>
-        </nav>
-     </header>
-     
+<?php include 'sidebar.php'; ?>
+		<div class="col-md-9">
+		    <div class="card">
+		        <div class="card-body">
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <h4>Your Profile</h4>
+		                    <hr>
+		                </div>
+		            </div>
+		            <div class="row">
+		                <div class="col-md-12">
+                           <h2><?php echo $_SESSION['first']; ?></h2> 
+                           <h2><?php echo $_SESSION['last']; ?></h2>
+                           <h3><?php echo $_SESSION['email']; ?></h3>
 
-     <div id="main"> 
-            <h2>Welcome to your Merchant Portal </h2>
-            <h3> Below you can see your products, add new products, and remove your products from the store </h3>
-
-           
-
-            <div id="product_modal" class="modal">
-            <div class="product_modal_content">
-                
-
-                <form method="post" action="add_product.php" enctype="multipart/form-data">
-                    Product Name: <input type="text" name="name" /> </br>
-                    Description: <textarea name="description" rows="5" cols="50"> </textarea> </br>
-                    Product Images: <input type="file" name="images" accept="image/*,video/*" multiple></br>
-                    How many in stock?: <input type="number" name="count" /></br>
-                    Department: <input type="text" name="department" /></br>
-                    Price: <input type="number" name="price" step="0.01"/></br>
-                    <button type="submit" name="submit">Add product </button></br>
-                </form>
-            </div>
-            </div>
-     </div>
-
-
-     <div id="current_products">
-
-    <?php 
-    if(empty($product_list) ){
-        print<<<EOF
-            <div id="product_box">
-                <h2> You currently do not have any item listed in the store. </h2>
-            </div>
-        EOF;
-    }
-    else{
-    
-    foreach($product_list as $product): ?>
-    
-    <div id="product_box">
-    <h2> <?= $product["name"]; ?></h2>
-    <img src="<?= $product["img_url"]; ?>" />
-    <p><?= $product["description"]; ?></p>
-    <h3>Sold by: <?= $product["seller_id"]; ?></h3>
-    <h3>amount left in stock: <?= $product["count"]; ?></h3>
-    <h3>price: $<?= $product["current_price"]; ?></h3>
-    <h3>department: <?= $product["department"]; ?></h3>
-
-    <button>Remove from Store</button></br>
-    <button>Update Listing </button> </br>
-    </div>
-
-<?php endforeach; }?>
-     </div>
+		                </div>
+		            </div>
+		            
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
 </body>
-</html>

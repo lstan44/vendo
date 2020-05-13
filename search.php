@@ -9,8 +9,18 @@ include_once 'config/Database.php';
 
 $db = new Database();
 $conn = $db->connect();
+$search_term;
+if(isset($_POST['search_box'])){
+    $search_term = $_POST['search_box'];
+}
+else if(isset($_GET['s'])){
+    $search_term = $_GET['s'];
+}
 
-$search_term = $_POST['search_box'];
+else{
+    $search_term = "fashion";
+}
+
 
 $query = "SELECT * from products as p, images as i where ( (description LIKE '%" . $search_term . "%' OR name LIKE '%".$search_term."%') AND (p.product_id = i.product_id) )";
 
@@ -31,7 +41,7 @@ $product_list = array();
 
 if($stmt->rowCount() <=0 ){
     $product_list = array(
-        'message'=> 'no products found.'
+        'status'=> 0
     );
 
 }
@@ -56,37 +66,47 @@ if($stmt->rowCount() <=0 ){
 
  }
 ?>
-
-<head>
-<title>Results for <?php echo $search_term; ?></title>
-</head>
-
-<body>
-
 <?php 
-    if(!isset($_SESSION['user_id'])){
+    if(!isset($_SESSION['id'])){
         include 'views/header1.php'; //
     }
     else{
         include 'views/header2.php';
     }
 ?>
-<?php foreach($product_list as $product): ?>
-    
-    <div id="product_box">
-    <h2> <?= $product["name"]; ?></h2>
-    <img src="<?= $product["img_url"]; ?>" />
-    <p><?= $product["description"]; ?></p>
-    <h3>Sold by: <?= $product["seller_id"]; ?></h3>
-    <h3>amount left in stock: <?= $product["count"]; ?></h3>
-    <h3>price: $<?= $product["current_price"]; ?></h3>
-    <h3>department: <?= $product["department"]; ?></h3>
+<?php
 
-    <button>add to cart</button>
-    </div>
+if(empty($product_list['status'] = 0)){
+    echo '<h2> No item found for the search term </h2>';
+}
+else{
+foreach($product_list as $product): ?>
+                            <div class="col-md-3 pro-1">
+								<div class="col-m">
+								<a href="single.php?id=<?= $product['product_id']; ?>" class="offer-img">
+										<img src="<?= $product["img_url"]; ?>" class="img-responsive" alt="">
+									</a>
+									<div class="mid-1">
+										<div class="women">
+											<h6><a href="single.php?id=<?= $product['product_id']; ?>"><?= $product["name"]; ?></a></h6>							
+										</div>
+										<div class="mid-2">
+											<p ><label>$7.00</label><em class="item_price">$<?= $product["current_price"]; ?></em></p>
+											  <div class="block">
+												<div class="starbox small ghosting"> </div>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+											<div class="add">
+												<form method="post" action="cart.php?action=add&pid=<?= $product['product_id']; ?>" >
+										   <button type="submit" class="btn btn-danger my-cart-btn my-cart-b">Add to Cart</button>
+												</form>
+										</div>
+									</div>
+								</div>
+							</div>
 
-<?php endforeach; ?>
-</body>
+<?php endforeach; }?>
 
 
-
+<?php include 'footer.php'; ?>

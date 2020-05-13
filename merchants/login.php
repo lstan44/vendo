@@ -18,6 +18,9 @@ var_dump($authIntent);
 if( $authIntent['status'] == 1){
     session_start();
     $_SESSION['seller_id'] = $authIntent['seller_id'];
+    $_SESSION['first'] = $authIntent['firstname'];
+    $_SESSION['last'] = $authIntent['lastname'];
+    $_SESSION['email'] = $authIntent['email'];
     
     header('Location: portal.php');
 }
